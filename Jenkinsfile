@@ -13,6 +13,7 @@ node {
     }
 
     stage('Build image') {
+       sh "chmod +x gradlew"
        sh "./gradlew clean build"
        app = docker.build("gabendockerzone/authorization-service")
     }
