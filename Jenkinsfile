@@ -36,8 +36,8 @@ node {
     stage('Trigger ManifestUpdate') {
                 echo "triggering updatemanifestjob"
                 build job: 'updatemanifest', parameters: [
-			string(name: 'DOCKERTAG', value: "${env.git_hash[0..7]}"),
-			string(name: 'APPLICATION_NAME', value: 'authorization-service')
+			string(name: 'APPLICATION_NAME', value: 'authorization-service'),
+			string(name: 'DOCKERTAG', value: "${env.git_hash[0..7]}")
 		]
         }
 }
