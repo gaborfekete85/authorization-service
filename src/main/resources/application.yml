@@ -1,0 +1,105 @@
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    serviceUrl:
+#      defaultZone: "${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}"
+spring:
+  application:
+    name: auth-client-service
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:30001/postgres?currentSchema=ford_auth}
+    username: ${DATASOURCE_USER:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+  liquibase:
+    change-log: classpath:/db/db.changelog-master.xml
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        ddl-auto: none
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  security:
+    oauth2:
+      client:
+        registration:
+          custom:
+            clientId: "clientId"
+            clientSecret: "client-secret"
+            redirectUri: "${BASE_URL:http://localhost:8300}/oauth2/callback/{registrationId}"
+            scope:
+              - read
+              - write
+            clientName: "customClient"
+            provider: "custom"
+            clientAuthenticationMethod: basic
+            authorizationGrantType: authorization_code
+          google:
+            clientId: ${GOOGLE_CLIENT_ID:912050282042-ais7fbu2uns1u3go9eoe6l8iaiv3iruo.apps.googleusercontent.com}
+            clientSecret: ${GOOGLE_CLIENT_SECRET:5Ex-92yP7Q1YU_TmgtVXiYR5}
+            redirectUri: "${BASE_URL:http://localhost:8300}/oauth2/callback/{registrationId}" # Registered in facebook developer portal: https://cloudbookings.com/oauth2/callback
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: ${FACEBOOK_CLIENT_ID:1670650839666976}
+            clientSecret: ${FACEBOOK_CLIENT_SECRET:97e1e2cfb217a1730563ad1361bda51c}
+            redirectUri: "${BASE_URL:http://localhost:8300}/oauth2/callback/{registrationId}" # Registered in Google developer portal: https://cloudbookings.com/oauth2/callback/google
+            scope:
+              - email
+              - public_profile
+          github:
+            clientId: d3e47fc2ddd966fa4352
+            clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v12.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v12.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v12.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,picture.width(250).height(250)
+          custom:
+            authorizationUri: http://localhost:8080/oauth/authorize
+            tokenUri: http://localhost:8080/oauth/token
+            userInfoUri: http://localhost:8300/api/auth/user/me
+            userNameAttribute: name
+            emailAttribute: email
+            userInfoAuthenticationMethod: header
+app:
+  name: "Ford Szervíz"
+  smtp:
+    userName: gabor.fekete85@gmail.com
+    password: ${SMTP_PASSWORD:5abmCGkcwUryvWKD}
+  publicEndpoint: ${BASE_URL:http://localhost:8300}
+  auth:
+    tokenSecret: b723306f617f4dc4b0edeae2555729d6
+    tokenExpirationMsec: 864000000
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    # To the registration URLs the provider redirects hence those mist be registered at them
+    # This URL goes back to the FE
+    authorizedRedirectUris:
+      - https://cloudbookings.com/oauth2/redirect
+      - https://awsbooking.gleeze.com/oauth2/redirect
+      - https://booking.gleeze.com/oauth2/redirect
+      - https://jumpion.gleeze.com/oauth2/redirect
+      - https://ford.gleeze.com/oauth2/redirect
+      - https://rewura.gleeze.com/oauth2/redirect
+      - https://rewura.com/oauth2/redirect
+      - http://localhost/oauth2/redirect
+      - http://localhost:8300/oauth2/redirect
+      - http://localhost:8080/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect

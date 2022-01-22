@@ -1,0 +1,18 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2020/06/11/table_roles" author="gabor.fekete85@gmail.com">
+        <comment>Create Roles table</comment>
+        <createTable tableName="roles">
+            <column name="role_id" type="numeric" remarks="Primary key of the role">
+                <constraints primaryKey="true" primaryKeyName="pk_role_id"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

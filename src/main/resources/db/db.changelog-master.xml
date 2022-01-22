@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+        <include relativeToChangelogFile="true" file="changelog/2020/06/users_simple.xml" />
+
+        <include relativeToChangelogFile="true" file="changelog/2020/06/users.xml" />
+        <include relativeToChangelogFile="true" file="changelog/2020/06/roles.xml" />
+        <include relativeToChangelogFile="true" file="changelog/2020/06/user_roles.xml" />
+        <!-- 2021 -->
+        <include relativeToChangelogFile="true" file="changelog/2021/09/table_users_09_10_01_new_field.xml" />
+        <include relativeToChangelogFile="true" file="changelog/2021/09/table_users_09_10_01_new_field.xml" />
+
+        <!-- 2022 -->
+        <include relativeToChangelogFile="true" file="changelog/2022/01/table_users_nf.xml" />
+
+</databaseChangeLog>

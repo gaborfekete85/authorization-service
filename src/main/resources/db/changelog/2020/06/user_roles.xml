@@ -1,0 +1,18 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2020/06/11/table-user_roles" author="gabor.fekete85@gmail.com">
+        <comment>Create Crime table</comment>
+        <createTable tableName="user_roles">
+            <column name="user_id" type="uuid" remarks="Foreign key to the User">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="numeric" remarks="Foreign key to the Role">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
