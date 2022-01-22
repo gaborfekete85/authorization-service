@@ -13,7 +13,7 @@ node {
     }
 
     stage('Build image') {
-  
+       sh "./gradlew clean build"
        app = docker.build("gabendockerzone/authorization-service")
     }
 
