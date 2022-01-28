@@ -92,8 +92,8 @@ jib {
         image = findProperty('DOCKER_REPOSITORY')+"/authorization-service"
         tags = [getGitHash()]
         auth {
-            username = dockerHubUserName
-            password = dockerHubPassword
+            username = findProperty('DOCKER_USERNAME') ?: dockerHubUserName
+            password = findProperty('DOCKER_PASSWORD') ?: dockerHubPassword
         }
     }
     container {

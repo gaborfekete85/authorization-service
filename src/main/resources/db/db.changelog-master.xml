@@ -16,4 +16,6 @@
         <!-- 2022 -->
         <include relativeToChangelogFile="true" file="changelog/2022/01/table_users_nf.xml" />
 
+        <include relativeToChangelogFile="true" file="changelog/2022/01/baseline.xml" />
+
 </databaseChangeLog>

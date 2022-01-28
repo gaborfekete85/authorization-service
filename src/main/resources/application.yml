@@ -8,7 +8,7 @@ spring:
   application:
     name: auth-client-service
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:30001/postgres?currentSchema=ford_auth}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5433/postgres?currentSchema=ford-authorization}
     username: ${DATASOURCE_USER:postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
   liquibase:

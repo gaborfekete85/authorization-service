@@ -1,0 +1,14 @@
+<databaseChangeLog
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="contact@feketegabor.com" id="insert-baseline">
+        <sql dbms="postgresql" endDelimiter=";">
+            insert into roles(role_id, name) values( 1, 'ROLE_ADMIN');
+            insert into roles(role_id, name) values( 2, 'ROLE_MODERATOR');
+            insert into roles(role_id, name) values( 3, 'ROLE_USER');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
