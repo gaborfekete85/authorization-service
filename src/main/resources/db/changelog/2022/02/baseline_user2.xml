@@ -1,0 +1,12 @@
+<databaseChangeLog
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="contact@feketegabor.com" id="insert-baseline-users2">
+        <sql dbms="postgresql" endDelimiter=";">
+            update users set email_verified =true;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
