@@ -1,0 +1,17 @@
+<databaseChangeLog
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="contact@feketegabor.com" id="insert-baseline-users">
+        <sql dbms="postgresql" endDelimiter=";">
+            delete from user_roles where user_id = (select id from users where email = 'test@test.com');
+            delete from users where email = 'test@test.com';
+            INSERT INTO rewura_auth.users(id, "name", email, image_url, email_verified, "password", provider_id, provider, registration_date_time, email_verification_code, phone) VALUES('7039fb0d-3fc0-4161-bba8-929e2db4a347'::uuid, 'Gábor Fekete', 'test@test.com', 'https://lh3.googleusercontent.com/a/AATXAJznoNU5hMiZ5y7eK67mYVbszHEcAW3SH6BUm4Mg=s96-c', false, NULL, 'local', '', NULL, NULL, NULL);
+            INSERT INTO user_roles(user_id, role_id) VALUES('7039fb0d-3fc0-4161-bba8-929e2db4a347'::uuid, 1);
+            INSERT INTO user_roles(user_id, role_id) VALUES('7039fb0d-3fc0-4161-bba8-929e2db4a347'::uuid, 2);
+            INSERT INTO user_roles(user_id, role_id) VALUES('7039fb0d-3fc0-4161-bba8-929e2db4a347'::uuid, 3);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

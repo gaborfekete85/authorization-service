@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Sort;
 
 import java.security.Principal;
 import java.util.*;
@@ -35,6 +36,13 @@ public class UserController {
     public String test() {
         return "Hello World";
     }
+
+    @GetMapping("/user/all")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public List<User> getAllUsers(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "email"));
+    }
+
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
