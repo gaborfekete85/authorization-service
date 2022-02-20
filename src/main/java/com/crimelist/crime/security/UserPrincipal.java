@@ -21,14 +21,18 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
     private final List<ERole> roles;
     private Map<String, Object> attributes;
+    private final String provider;
+    private final String providerId;
 
-    public UserPrincipal(UUID id, String email, boolean emailVerified, String password, Collection<? extends GrantedAuthority> authorities, List<ERole> roles) {
+    public UserPrincipal(UUID id, String email, boolean emailVerified, String password, Collection<? extends GrantedAuthority> authorities, List<ERole> roles, String provider, String providerId) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
         this.roles = roles;
         this.emailVerified = emailVerified;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     public static UserPrincipal create(User user) {
@@ -43,7 +47,9 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getEmailVerified(),
                 user.getPassword(),
                 authorities,
-                roles
+                roles,
+                user.getProvider().name(),
+                user.getProviderId()
         );
     }
 
@@ -112,5 +118,17 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     public List<ERole> getRoles() {
         return roles;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
     }
 }

@@ -1,5 +1,6 @@
 package com.crimelist.crime.controller;
 
+import com.crimelist.crime.config.AppProperties;
 import com.crimelist.crime.model.AuthProvider;
 import com.crimelist.crime.model.ERole;
 import com.crimelist.crime.model.Role;
@@ -11,19 +12,31 @@ import com.crimelist.crime.repository.RoleRepository;
 import com.crimelist.crime.repository.UserRepository;
 import com.crimelist.crime.exception.BadRequestException;
 import com.crimelist.crime.model.User;
+import com.crimelist.crime.security.CustomUserDetailsService;
 import com.crimelist.crime.security.TokenProvider;
+import com.crimelist.crime.security.UserPrincipal;
+import com.google.api.client.util.ArrayMap;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,10 +53,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
+import java.security.Principal;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -79,6 +90,50 @@ public class AuthController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @GetMapping("/sso-token")
+    public ResponseEntity<?> generateSSOToken(@RequestHeader(name = "id-token", required = true) String idToken) throws FirebaseAuthException {
+        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+        //UserPrincipal principal = UserPrincipal.create(userRepository.findByEmail(decodedToken.getEmail()).get());
+        UserPrincipal userDetails = null;
+        try {
+            userDetails = customUserDetailsService.loadUserByUsername(decodedToken.getEmail());
+            if("local".equals(userDetails.getProvider())) {
+                User toUpdate = userRepository.findByEmail(decodedToken.getEmail()).get();
+                List<String> fbData = (List) ((ArrayMap) ((ArrayMap) decodedToken.getClaims().get("firebase")).get("identities")).get("facebook.com");
+                if(fbData != null) {
+                    toUpdate.setProvider(AuthProvider.valueOf(AuthProvider.facebook.name()));
+                    toUpdate.setProviderId(fbData.get(0));
+                }
+                userRepository.save(toUpdate);
+            }
+        } catch(UsernameNotFoundException e) {
+            User user = new User();
+            user.setName(decodedToken.getName());
+            user.setEmail(decodedToken.getEmail());
+            user.setPassword("");
+            user.setProvider(AuthProvider.facebook);
+            user.setProviderId("123");
+            user.setEmailVerificationCode("");
+            user.setEmailVerified(true);
+            user.setPhone("");
+            user.setImageUrl(decodedToken.getPicture());
+            user.setPassword(null);
+            Role userRoles = roleRepository.findByName(ERole.ROLE_USER);
+            user.setRoles(Set.of(userRoles));
+            User result = userRepository.save(user);
+            userDetails = UserPrincipal.create(result);
+        }
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        responseHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(tokenProvider.createToken(authentication)));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
