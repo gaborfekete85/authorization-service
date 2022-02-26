@@ -1,5 +1,6 @@
 package com.crimelist.crime.controller;
 
+import com.crimelist.crime.AuthorizationApplication;
 import com.crimelist.crime.config.AppProperties;
 import com.crimelist.crime.model.AuthProvider;
 import com.crimelist.crime.model.ERole;
@@ -16,6 +17,7 @@ import com.google.api.client.util.ArrayMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.UserRecord;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -152,7 +154,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws MessagingException {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws MessagingException, FirebaseAuthException {
         logger.info("New user");
         logger.info("select user0_.id as col_0_0_ from users user0_ where user0_.email='" + signUpRequest.getEmail() +"' limit 1");
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
@@ -187,8 +189,28 @@ public class AuthController {
                 .fromCurrentContextPath().path("/user/me")
                 .buildAndExpand(result.getId()).toUri();
         logger.info("New user");
+        registerFirebaseUser(result, signUpRequest.getPassword());
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User successfully registered. "));
+    }
+
+    private void registerFirebaseUser(User user, String password) throws FirebaseAuthException {
+        UserRecord.CreateRequest ur = new UserRecord.CreateRequest();
+        ur.setEmail(user.getEmail());
+        ur.setEmailVerified(false);
+        ur.setPassword(password);
+        ur.setDisabled(false);
+        ur.setDisplayName(user.getName());
+        UserRecord response = FirebaseAuth.getInstance().createUser(ur);
+        Map insert = new HashMap() {{
+            put("name", response.getDisplayName());
+            put("email", response.getEmail());
+            put("username", response.getEmail());
+            put("image", "default");
+            put("followingCount", 0);
+            put("followersCount", 0);
+        }};
+        AuthorizationApplication.fireStore.collection("users").document(response.getUid()).set(insert);
     }
 
     @SneakyThrows
