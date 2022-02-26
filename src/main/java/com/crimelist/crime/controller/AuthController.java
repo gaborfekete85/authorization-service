@@ -128,7 +128,8 @@ public class AuthController {
         responseHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
 
         if(!userDetails.isEnabled()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(ErrorResponse.builder().errorCode("AUT_001").build());
+            ErrorResponse responseBody = new ErrorResponse("AUT_001");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(responseBody);
         }
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(tokenProvider.createToken(authentication)));
