@@ -4,10 +4,7 @@ import com.crimelist.crime.config.AppProperties;
 import com.crimelist.crime.model.AuthProvider;
 import com.crimelist.crime.model.ERole;
 import com.crimelist.crime.model.Role;
-import com.crimelist.crime.payload.ApiResponse;
-import com.crimelist.crime.payload.AuthResponse;
-import com.crimelist.crime.payload.LoginRequest;
-import com.crimelist.crime.payload.SignUpRequest;
+import com.crimelist.crime.payload.*;
 import com.crimelist.crime.repository.RoleRepository;
 import com.crimelist.crime.repository.UserRepository;
 import com.crimelist.crime.exception.BadRequestException;
@@ -26,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,8 +37,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.crimelist.crime.payload.PasswordResetRequest;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -127,11 +123,14 @@ public class AuthController {
             User result = userRepository.save(user);
             userDetails = UserPrincipal.create(result);
         }
-
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         responseHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+
+        if(!userDetails.isEnabled()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(ErrorResponse.builder().errorCode("AUT_001").build());
+        }
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(tokenProvider.createToken(authentication)));
     }
 
