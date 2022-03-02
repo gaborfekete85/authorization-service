@@ -49,6 +49,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
@@ -172,6 +173,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @Transactional
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws MessagingException, FirebaseAuthException {
         logger.info("New user");
         logger.info("select user0_.id as col_0_0_ from users user0_ where user0_.email='" + signUpRequest.getEmail() +"' limit 1");
@@ -239,7 +241,7 @@ public class AuthController {
             put("name", user.getName());
             put("email", user.getEmail());
             put("username", user.getEmail());
-            put("image", "default");
+            put("image", user.getImageUrl());
             put("followingCount", 0);
             put("followersCount", 0);
         }};
