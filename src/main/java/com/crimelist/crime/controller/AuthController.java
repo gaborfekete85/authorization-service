@@ -116,8 +116,8 @@ public class AuthController {
             user.setName(decodedToken.getName());
             user.setEmail(decodedToken.getEmail());
             user.setPassword(fbUser.getProviderId());
-            user.setProvider(AuthProvider.facebook);
-            user.setProviderId("123");
+            user.setProvider(AuthProvider.local);
+            user.setProviderId("");
             user.setEmailVerificationCode("");
             user.setEmailVerified(true);
             user.setPhone("");
@@ -125,6 +125,19 @@ public class AuthController {
             user.setPassword(null);
             Role userRoles = roleRepository.findByName(ERole.ROLE_USER);
             user.setRoles(Set.of(userRoles));
+
+            List<String> fbData = (List) ((ArrayMap) ((ArrayMap) decodedToken.getClaims().get("firebase")).get("identities")).get("facebook.com");
+            if(fbData != null) {
+                user.setProvider(AuthProvider.valueOf(AuthProvider.facebook.name()));
+                user.setProviderId(fbData.get(0));
+            }
+
+            List<String> googleData = (List) ((ArrayMap) ((ArrayMap) decodedToken.getClaims().get("firebase")).get("identities")).get("google.com");
+            if(googleData != null) {
+                user.setProvider(AuthProvider.valueOf(AuthProvider.google.name()));
+                user.setProviderId(googleData.get(0));
+            }
+
             User result = userRepository.save(user);
             userDetails = UserPrincipal.create(result);
             persistFirebaseUser(decodedToken.getUid(), user);
@@ -206,11 +219,12 @@ public class AuthController {
         ur.setDisabled(false);
         ur.setDisplayName(user.getName());
         UserRecord response = FirebaseAuth.getInstance().createUser(ur);
+
         Map insert = new HashMap() {{
             put("name", response.getDisplayName());
             put("email", response.getEmail());
             put("username", response.getEmail());
-            put("image", "default");
+            put("image", response.getPhotoUrl());
             put("followingCount", 0);
             put("followersCount", 0);
         }};
