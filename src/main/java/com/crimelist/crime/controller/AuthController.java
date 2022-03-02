@@ -95,6 +95,8 @@ public class AuthController {
     @GetMapping("/sso-token")
     public ResponseEntity<?> generateSSOToken(@RequestHeader(name = "id-token", required = true) String idToken) throws FirebaseAuthException {
         FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+        UserRecord fbUser = FirebaseAuth.getInstance().getUserByEmail(decodedToken.getEmail());
+
         //UserPrincipal principal = UserPrincipal.create(userRepository.findByEmail(decodedToken.getEmail()).get());
         UserPrincipal userDetails = null;
         try {
@@ -112,7 +114,7 @@ public class AuthController {
             User user = new User();
             user.setName(decodedToken.getName());
             user.setEmail(decodedToken.getEmail());
-            user.setPassword("");
+            user.setPassword(fbUser.getProviderId());
             user.setProvider(AuthProvider.facebook);
             user.setProviderId("123");
             user.setEmailVerificationCode("");
@@ -124,6 +126,7 @@ public class AuthController {
             user.setRoles(Set.of(userRoles));
             User result = userRepository.save(user);
             userDetails = UserPrincipal.create(result);
+            registerFirebaseUser(result, "");
         }
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
