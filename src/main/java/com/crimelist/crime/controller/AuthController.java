@@ -14,6 +14,7 @@ import com.crimelist.crime.security.CustomUserDetailsService;
 import com.crimelist.crime.security.TokenProvider;
 import com.crimelist.crime.security.UserPrincipal;
 import com.google.api.client.util.ArrayMap;
+import com.google.api.core.ApiFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -126,7 +127,7 @@ public class AuthController {
             user.setRoles(Set.of(userRoles));
             User result = userRepository.save(user);
             userDetails = UserPrincipal.create(result);
-            registerFirebaseUser(result, "");
+            persistFirebaseUser(decodedToken.getUid(), user);
         }
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -213,7 +214,20 @@ public class AuthController {
             put("followingCount", 0);
             put("followersCount", 0);
         }};
-        AuthorizationApplication.fireStore.collection("users").document(response.getUid()).set(insert);
+        persistFirebaseUser(response.getUid(), user);
+        //AuthorizationApplication.fireStore.collection("users").document(response.getUid()).set(insert);
+    }
+
+    private void persistFirebaseUser(String uid, User user) {
+        Map insert = new HashMap() {{
+            put("name", user.getName());
+            put("email", user.getEmail());
+            put("username", user.getEmail());
+            put("image", "default");
+            put("followingCount", 0);
+            put("followersCount", 0);
+        }};
+        AuthorizationApplication.fireStore.collection("users").document(uid).set(user);
     }
 
     @SneakyThrows
