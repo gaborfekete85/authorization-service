@@ -53,6 +53,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @RestController
@@ -125,7 +126,7 @@ public class AuthController {
             user.setPassword(null);
             Role userRoles = roleRepository.findByName(ERole.ROLE_USER);
             user.setRoles(Set.of(userRoles));
-
+            user.setRegistrationDateTime(OffsetDateTime.now());
             List<String> fbData = (List) ((ArrayMap) ((ArrayMap) decodedToken.getClaims().get("firebase")).get("identities")).get("facebook.com");
             if(fbData != null) {
                 user.setProvider(AuthProvider.valueOf(AuthProvider.facebook.name()));
@@ -188,6 +189,7 @@ public class AuthController {
         user.setEmailVerificationCode(verificationCode);
         user.setEmailVerified(false);
         user.setPhone(signUpRequest.getPhone());
+        user.setRegistrationDateTime(OffsetDateTime.now());
         logger.info("New user");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role userRoles = roleRepository.findByName(ERole.ROLE_USER);
@@ -241,7 +243,7 @@ public class AuthController {
             put("followingCount", 0);
             put("followersCount", 0);
         }};
-        AuthorizationApplication.fireStore.collection("users").document(uid).set(user);
+        AuthorizationApplication.fireStore.collection("users").document(uid).set(insert);
     }
 
     @SneakyThrows

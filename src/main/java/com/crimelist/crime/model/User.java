@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +54,9 @@ public class User {
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "registration_date_time")
+    private OffsetDateTime registrationDateTime;
 
     private String providerId;
 
@@ -142,5 +146,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public OffsetDateTime getRegistrationDateTime() {
+        return registrationDateTime;
+    }
+
+    public void setRegistrationDateTime(OffsetDateTime registrationDateTime) {
+        this.registrationDateTime = registrationDateTime;
     }
 }
