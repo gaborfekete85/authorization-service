@@ -65,19 +65,27 @@ public class UserController {
         return userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
     }
-
+    
     @PostMapping("/user/find")
     @PreAuthorize("hasRole('USER')")
     public List<User> findByIds(@RequestBody List<UUID> userIds) {
         return userRepository.findByIds(userIds);
     }
 
-    @PostMapping("/user/update-image")
+    @PostMapping("/user/update")
     @PreAuthorize("hasRole('USER')")
     public User updateImage(Principal principal, @RequestBody UpdateImageRequest updateImageRequest) {
         UUID userId = SecurityUtil.getUserId(principal);
         User user = userRepository.findById(userId).get();
-        user.setImageUrl(updateImageRequest.getImageUrl());
+        if(updateImageRequest.getName() != null) {
+            user.setName(updateImageRequest.getName());
+        }
+        if(updateImageRequest.getPhone() != null) {
+            user.setPhone(updateImageRequest.getPhone());
+        }
+        if(updateImageRequest.getImageUrl() != null) {
+            user.setImageUrl(updateImageRequest.getImageUrl());
+        }
         return userRepository.save(user);
     }
 
