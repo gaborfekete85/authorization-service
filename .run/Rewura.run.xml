@@ -1,0 +1,37 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Rewura" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="env">
+        <map>
+          <entry key="BASE_URL" value="http://localhost:8400" />
+          <entry key="DATASOURCE_PASSWORD" value="bF7oqNBFHV" />
+          <entry key="DATASOURCE_URL" value="jdbc:postgresql://localhost:30055/postgres?currentSchema=loc_rewura_auth,public,pg_catalog" />
+          <entry key="DATASOURCE_USER" value="postgres" />
+          <entry key="FACEBOOK_CLIENT_ID" value="1670650839666976" />
+          <entry key="FACEBOOK_CLIENT_SECRET" value="97e1e2cfb217a1730563ad1361bda51c" />
+          <entry key="GOOGLE_APPLICATION_CREDENTIALS" value="/app/resources/instaclone-5eae6-firebase-adminsdk-no4gm-902fdd671d.json" />
+          <entry key="GOOGLE_CLIENT_ID" value="912050282042-ais7fbu2uns1u3go9eoe6l8iaiv3iruo.apps.googleusercontent.com" />
+          <entry key="GOOGLE_CLIENT_SECRET" value="5Ex-92yP7Q1YU_TmgtVXiYR5" />
+          <entry key="SERVER_PORT" value="8402" />
+        </map>
+      </option>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value="bootRun" />
+        </list>
+      </option>
+      <option name="vmOptions" />
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <method v="2" />
+  </configuration>
+</component>

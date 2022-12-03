@@ -18,7 +18,7 @@ apply plugin: 'groovy'
 
 
 bootRun {
-    environment (["GOOGLE_APPLICATION_CREDENTIALS": "c:\\projects\\global-services\\authorization-service\\src\\main\\resources\\instaclone-5eae6-firebase-adminsdk-no4gm-902fdd671d.json" ])
+    environment (["GOOGLE_APPLICATION_CREDENTIALS": "/Users/feketegabor/projects/authorization-service/src/main/resources/instaclone-5eae6-firebase-adminsdk-no4gm-902fdd671d.json" ])
 }
 
 dependencies {

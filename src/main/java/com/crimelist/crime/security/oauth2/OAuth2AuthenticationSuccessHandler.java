@@ -42,8 +42,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
         String targetUrl = determineTargetUrl(request, response, authentication);
-        if(!targetUrl.startsWith(baseUrl)) {
+
+        if(!targetUrl.startsWith(baseUrl) && !targetUrl.startsWith("exp")) {
             targetUrl = baseUrl + "/oauth2/redirect" + targetUrl;
         }
 
@@ -79,18 +81,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
-
-        return appProperties.getOauth2().getAuthorizedRedirectUris()
-                .stream()
-                .anyMatch(authorizedRedirectUri -> {
-                    // Only validate host and port. Let the clients use different paths if they want to
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
-                    if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                            && authorizedURI.getPort() == clientRedirectUri.getPort()) {
-                        return true;
-                    }
-                    return true;
-                });
+        return true;
+//        URI clientRedirectUri = URI.create(uri);
+//
+//        return appProperties.getOauth2().getAuthorizedRedirectUris()
+//                .stream()
+//                .anyMatch(authorizedRedirectUri -> {
+//                    // Only validate host and port. Let the clients use different paths if they want to
+//                    URI authorizedURI = URI.create(authorizedRedirectUri);
+//                    if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+//                            && authorizedURI.getPort() == clientRedirectUri.getPort()) {
+//                        return true;
+//                    }
+//                    return false;
+//                });
     }
 }

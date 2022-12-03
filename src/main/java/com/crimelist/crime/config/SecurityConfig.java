@@ -1,5 +1,6 @@
 package com.crimelist.crime.config;
 
+import com.crimelist.crime.security.CustomSavedRequestFilter;
 import com.crimelist.crime.security.CustomUserDetailsService;
 import com.crimelist.crime.security.RestAuthenticationEntryPoint;
 import com.crimelist.crime.security.TokenAuthenticationFilter;
@@ -65,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter();
     }
+
+    public CustomSavedRequestFilter  customSavedRequestFilter() { return new CustomSavedRequestFilter(); }
 
     private ClientRegistration getRegistration(String client) {
         String clientId = System.getenv(
@@ -186,6 +189,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add our custom Token based authentication filter
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(customSavedRequestFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 //    @Bean

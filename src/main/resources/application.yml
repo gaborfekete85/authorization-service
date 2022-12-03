@@ -106,6 +106,7 @@ app:
       - myiosapp://oauth2/redirect
       - exp://172.20.10.3:19002/oauth2/callback
       - exp://172.20.10.3:19002/oauth2/redirect
+      - exp://wg-qka.notbrent.app.exp.direct
 
 #sever:
 #  port: 8402
