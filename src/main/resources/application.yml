@@ -97,6 +97,7 @@ app:
       - https://jumpion.gleeze.com/oauth2/redirect
       - https://ford.gleeze.com/oauth2/redirect
       - https://rewura.gleeze.com/oauth2/redirect
+      - https://ford.local/oauth2/redirect
       - https://rewura.com/oauth2/redirect
       - http://localhost/oauth2/redirect
       - http://localhost:8300/oauth2/redirect

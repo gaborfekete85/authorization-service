@@ -3,7 +3,7 @@
     <ExternalSystemSettings>
       <option name="env">
         <map>
-          <entry key="BASE_URL" value="http://localhost:8300" />
+          <entry key="BASE_URL" value="https://ford.local" />
           <entry key="DATASOURCE_PASSWORD" value="postgres" />
           <entry key="DATASOURCE_URL" value="jdbc:postgresql://185.230.138.229:30001/postgres?currentSchema=ford_dev_gf,public,pg_catalog" />
           <entry key="DATASOURCE_USER" value="postgres" />
