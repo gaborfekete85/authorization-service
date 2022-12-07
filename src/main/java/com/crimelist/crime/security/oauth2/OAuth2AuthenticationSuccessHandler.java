@@ -2,8 +2,11 @@ package com.crimelist.crime.security.oauth2;
 
 import com.crimelist.crime.config.AppProperties;
 import com.crimelist.crime.exception.BadRequestException;
+import com.crimelist.crime.security.TokenAuthenticationFilter;
 import com.crimelist.crime.util.CookieUtils;
 import com.crimelist.crime.security.TokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -22,7 +25,7 @@ import static com.crimelist.crime.security.oauth2.HttpCookieOAuth2AuthorizationR
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
+    private static final Logger logger = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
     private TokenProvider tokenProvider;
 
     private AppProperties appProperties;
