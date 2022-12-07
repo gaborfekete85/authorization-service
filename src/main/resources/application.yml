@@ -8,7 +8,7 @@ spring:
   application:
     name: auth-client-service
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5434/postgres?currentSchema=rewura_auth}
+    url: ${DATASOURCE_URL:jdbc:postgresql://185.230.138.229:30001/postgres?currentSchema=ford_auth}
     username: ${DATASOURCE_USER:postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
   liquibase:
@@ -100,6 +100,13 @@ app:
       - https://rewura.com/oauth2/redirect
       - http://localhost/oauth2/redirect
       - http://localhost:8300/oauth2/redirect
+      - http://localhost:8400/oauth2/redirect
       - http://localhost:8080/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
+      - exp://172.20.10.3:19002/oauth2/callback
+      - exp://172.20.10.3:19002/oauth2/redirect
+      - exp://wg-qka.notbrent.app.exp.direct
+
+#sever:
+#  port: 8402

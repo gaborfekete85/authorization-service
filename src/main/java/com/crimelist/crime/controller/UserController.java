@@ -100,6 +100,17 @@ public class UserController {
         return userRepository.save(user);
     }
 
+    @PostMapping("/user/update-image")
+    @PreAuthorize("hasRole('USER')")
+    public User updateUserRols(Principal principal, @RequestBody UpdateImageRequest updateImageRequest) {
+        UUID userId = SecurityUtil.getUserId(principal);
+        User user = userRepository.findById(userId).get();
+        if(updateImageRequest.getImageUrl() != null) {
+            user.setImageUrl(updateImageRequest.getImageUrl());
+        }
+        return userRepository.save(user);
+    }
+
     private List<ERole> collectRoles(ERole role) {
         if(ERole.ROLE_USER.equals(role)) {
             return List.of(ERole.ROLE_USER);

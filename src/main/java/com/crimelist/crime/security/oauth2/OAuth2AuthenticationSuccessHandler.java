@@ -42,8 +42,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
         String targetUrl = determineTargetUrl(request, response, authentication);
-        if(!targetUrl.startsWith(baseUrl)) {
+
+        if(!targetUrl.startsWith(baseUrl) && !targetUrl.startsWith("exp")) {
             targetUrl = baseUrl + "/oauth2/redirect" + targetUrl;
         }
 
@@ -51,7 +53,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
         }
-
+        logger.info("CHK-001: Redirecting to {}", targetUrl);
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
