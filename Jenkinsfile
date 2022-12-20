@@ -13,9 +13,11 @@ node {
     }
 
     stage('Build image') {
-       sh "chmod +x gradlew"
-       sh "./gradlew clean build"
-       app = docker.build("gabendockerzone/authorization-service")
+       withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+           sh "chmod +x gradlew"
+           sh "./gradlew clean build"
+           app = docker.build("gabendockerzone/authorization-service")
+       }
     }
 
     stage('Test image') {
