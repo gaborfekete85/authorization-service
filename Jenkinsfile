@@ -28,8 +28,9 @@ node {
        }
        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
            sh "chmod +x gradlew"
-           sh "./gradlew clean build"
-           app = docker.build("gabendockerzone/authorization-service")
+           //sh "./gradlew clean build"
+	   sh "./gradlew clean build publish jib -PDOCKER_REPOSITORY=gabendockerzone"
+           //app = docker.build("gabendockerzone/authorization-service")
        }
     }
 
