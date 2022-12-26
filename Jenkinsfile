@@ -13,7 +13,7 @@ node {
     }
 
     stage('Build image') {
-       withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+       withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'dockerHubUserName')]) {
            sh "chmod +x gradlew"
            sh "./gradlew clean build"
            app = docker.build("gabendockerzone/authorization-service")
