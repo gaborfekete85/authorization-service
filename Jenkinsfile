@@ -16,6 +16,8 @@ node {
        environment {
 	   DOCKER_USERNAME = 'gabendockerzone'
 	   DOCKER_PASSWORD = 'gD5Abb421'
+	   dockerHubUserName = 'gabendockerzone'
+	   dockerHubPassword = 'gD5Abb421'
        }
        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
            sh "chmod +x gradlew"
