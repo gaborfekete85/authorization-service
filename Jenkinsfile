@@ -13,6 +13,13 @@ node {
     }
 
     stage('Build image') {
+	    agent {
+                docker {
+                    image 'monostream/devcloud-build-java:11'
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/jenkins_home/.m2:/home/devcloud/.m2 -v /var/jenkins_home/gradle_properties:/home/devcloud/.gradle'
+                    reuseNode true
+                }
+            }
        environment {
 	   DOCKER_USERNAME = 'gabendockerzone'
 	   DOCKER_PASSWORD = 'gD5Abb421'
