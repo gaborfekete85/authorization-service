@@ -15,7 +15,7 @@ node {
     stage('Build image') {
 	    agent {
                 docker {
-                    image 'monostream/devcloud-build-java:11'
+                    image 'adoptopenjdk/openjdk11:alpine-jre'
                     args '--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/jenkins_home/.m2:/home/devcloud/.m2 -v /var/jenkins_home/gradle_properties:/home/devcloud/.gradle'
                     reuseNode true
                 }
@@ -29,7 +29,7 @@ node {
        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
            sh "chmod +x gradlew"
            //sh "./gradlew clean build"
-	   sh "./gradlew clean build publish jib -PDOCKER_REPOSITORY=gabendockerzone"
+	       sh "./gradlew clean build publish jib -PDOCKER_REPOSITORY=gabendockerzone"
            //app = docker.build("gabendockerzone/authorization-service")
        }
     }
