@@ -16,16 +16,16 @@ node {
 	    agent {
                 docker {
                     image 'monostream/devcloud-build-java:11'
-                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/jenkins_home/.m2:/home/jenkins/.m2 -v /var/jenkins_home/gradle_properties:/home/jenkins/.gradle'
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/jenkins_home/.m2:/home/devcloud/.m2 -v /var/jenkins_home/gradle_properties:/home/devcloud/.gradle'
                     reuseNode true
                 }
             }
-//        environment {
-// 	   DOCKER_USERNAME = 'gabendockerzone'
-// 	   DOCKER_PASSWORD = 'gD5Abb421'
-// 	   dockerHubUserName = 'gabendockerzone'
-// 	   dockerHubPassword = 'gD5Abb421'
-//        }
+       environment {
+	   DOCKER_USERNAME = 'gabendockerzone'
+	   DOCKER_PASSWORD = 'gD5Abb421'
+	   dockerHubUserName = 'gabendockerzone'
+	   dockerHubPassword = 'gD5Abb421'
+       }
        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
            sh "chmod +x gradlew"
            //sh "./gradlew clean build"
