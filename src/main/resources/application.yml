@@ -10,7 +10,7 @@ spring:
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://185.230.138.229:30001/postgres?currentSchema=ford_auth}
     username: ${DATASOURCE_USER:postgres}
-    password: ${DATASOURCE_PASSWORD:bF7oqNBFHV}
+    password: ${DATASOURCE_PASSWORD:postgres}
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
   jpa:

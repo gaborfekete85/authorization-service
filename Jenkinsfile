@@ -28,9 +28,9 @@ node {
        }
        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
            sh "chmod +x gradlew"
-           //sh "./gradlew clean build"
-	       sh "./gradlew clean build publish jib -PDOCKER_REPOSITORY=gabendockerzone"
-           //app = docker.build("gabendockerzone/authorization-service")
+           sh "./gradlew clean build"
+	       //sh "./gradlew clean build publish jib -PDOCKER_REPOSITORY=gabendockerzone"
+           app = docker.build("gabendockerzone/authorization-service")
        }
     }
 
@@ -46,11 +46,11 @@ node {
         //}
     //}
     
-    stage('Trigger ManifestUpdate') {
-                echo "triggering updatemanifestjob"
-                build job: 'updatemanifest/master', parameters: [
-			string(name: 'APPLICATION_NAME', value: "${env.git_hash[0..7]}"),
-			string(name: 'DOCKERTAG', value: "${env.git_hash[0..7]}")
-		]
-        }
+//     stage('Trigger ManifestUpdate') {
+//                 echo "triggering updatemanifestjob"
+//                 build job: 'updatemanifest/master', parameters: [
+// 			string(name: 'APPLICATION_NAME', value: "${env.git_hash[0..7]}"),
+// 			string(name: 'DOCKERTAG', value: "${env.git_hash[0..7]}")
+// 		]
+//         }
 }

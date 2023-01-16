@@ -4,8 +4,8 @@
       <option name="env">
         <map>
           <entry key="BASE_URL" value="http://localhost:8300" />
-          <entry key="DATASOURCE_PASSWORD" value="bF7oqNBFHV" />
-          <entry key="DATASOURCE_URL" value="jdbc:postgresql://185.230.138.229:30001/postgres?currentSchema=loc_ford_auth_v2,public,pg_catalog" />
+          <entry key="DATASOURCE_PASSWORD" value="postgres" />
+          <entry key="DATASOURCE_URL" value="jdbc:postgresql://185.230.138.229:30001/postgres?currentSchema=ford_auth_dev,public,pg_catalog" />
           <entry key="DATASOURCE_USER" value="postgres" />
           <entry key="FACEBOOK_CLIENT_ID" value="1670650839666976" />
           <entry key="FACEBOOK_CLIENT_SECRET" value="97e1e2cfb217a1730563ad1361bda51c" />
